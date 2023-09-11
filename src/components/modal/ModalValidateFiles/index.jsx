@@ -1,14 +1,29 @@
 import Modal from "react-modal";
 Modal.setAppElement('#root');
+import api from "../../../service/api";
 import { CustomModal, ModalStyle, ContentModal, LineTable, Button } from "./style";
 
-export default function ModalValidateFiles({ fileData, isOpen, setIsOpen }) {
+export default function ModalValidateFiles({ fileData, setSelectedFile, isOpen, setIsOpen }) {
 
     const disableButton = fileData.some((item) => item.allowed === false);
 
     function closeModal() {
         setIsOpen(false);
     }
+
+    async function updateProducts(){
+        const data = fileData.filter((item) => (item.code));
+        try {
+            await api.postUpdateProducts(data);
+            setSelectedFile();            
+            closeModal();
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
     return (
         <div>
             <CustomModal
@@ -29,7 +44,7 @@ export default function ModalValidateFiles({ fileData, isOpen, setIsOpen }) {
                     {fileData.map((item, index) => <Product key={index} element={item} />)}
 
                 </ContentModal>
-                <Button disabled={disableButton}>ATUALIZAR</Button>
+                <Button disabled={disableButton} onClick={updateProducts}>ATUALIZAR</Button>
             </CustomModal>
         </div>
     );

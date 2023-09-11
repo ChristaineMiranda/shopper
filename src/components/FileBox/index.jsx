@@ -20,7 +20,7 @@ export default function FileBox() {
 
     function validateFileContent(element, index) {
         if (element[0] === '') {
-            return true; // Ignora linhas vazias
+            return true; 
         }
         if (!index) {
             if (!element.includes("product_code") || !element.includes("new_price")) {
@@ -40,7 +40,7 @@ export default function FileBox() {
                 
         Papa.parse(selectedFile, {
             complete: async (result) => {
-                const assessment = result.data.map(validateFileContent); //valida preenchimento
+                const assessment = result.data.map(validateFileContent); 
                 if (assessment.includes(false)) return;
 
                 const data = result.data.slice(1);
@@ -48,7 +48,6 @@ export default function FileBox() {
                 try {
                     const response = await api.postDataFile(data);
                     setFileData(response.data);
-                    console.log(response.data)
                     setModalIsOpen(true);
                     
                 } catch (error) {
@@ -79,7 +78,7 @@ export default function FileBox() {
                     <BoxFileName>{selectedFile ? selectedFile.name : ""}</BoxFileName>
                 </Choice>
                 <ButtonValidation onClick={validateFile}>Validar</ButtonValidation>
-                <ModalValidateFiles fileData={fileData} isOpen={modalIsOpen} setIsOpen={setModalIsOpen}/>
+                <ModalValidateFiles fileData={fileData} setSelectedFile={setSelectedFile} isOpen={modalIsOpen} setIsOpen={setModalIsOpen}/>
             </Principal>
         </Container>
     )
